@@ -1,0 +1,64 @@
+name: Laravel
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  laravel-tests:
+
+    name: Laravel (PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }})
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [ubuntu-latest]
+        php-versions: ['7.4']
+
+    services:
+      database:
+        image: mysql:5.7
+        ports:
+          - 3306:3306
+        options: --health-cmd "mysqladmin ping -h localhost" --health-interval 20s --health-timeout 10s --health-retries 10
+        env:
+          MYSQL_DATABASE: webapp_testing
+          MYSQL_USER: webapp
+          MYSQL_PASSWORD: Passw0rd
+          MYSQL_ROOT_PASSWORD: Passw0rd
+
+    env:
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: webapp_testing
+      DB_USERNAME: webapp
+      DB_PASSWORD: Passw0rd
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup PHP, with composer and extensions
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+        extensions: pdo_mysql
+    - name: Copy .env
+      run: |
+        cd src
+        php -r "file_exists('.env') || copy('.env.example', '.env');"
+    - name: Install Dependencies
+      run: |
+        cd src
+        composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+    - name: Generate key
+      run: |
+        cd src
+        php artisan key:generate
+    - name: Directory Permissions
+      run: |
+        cd src
+        chmod -R 777 storage bootstrap/cache
+    - name: Execute tests (Unit and Feature tests) via PHPUnit
+      run: |
+        cd src
+        vendor/bin/phpunit

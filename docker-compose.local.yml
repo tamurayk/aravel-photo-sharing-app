@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=database
+      - PMA_USER=webapp
+      - PMA_PASSWORD=Passw0rd
+    links:
+      - database
+    ports:
+       - 8080:80
+    volumes:
+       - /sessions

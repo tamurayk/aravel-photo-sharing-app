@@ -1,0 +1,21 @@
+# See: https://phpstan.org/config-reference
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - app
+
+    # The level 8 is the highest level
+    # See: https://phpstan.org/user-guide/rule-levels
+    level: 5
+
+    ignoreErrors:
+        - '#Method .* should return Illuminate\\Http\\Response but returns Illuminate\\View\\View.#'
+        - '#Return typehint of method App\\Models\\Interfaces\\BaseInterface::all\(\) has invalid type App\\Models\\Interfaces\\static.#'
+
+    excludes_analyse:
+        #- ./*/*/FileToBeExcluded.php
+
+    checkMissingIterableValueType: false

@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  database:
+    container_name: database
+    image: mysql:5.7 #https://laravel.com/docs/7.x/database
+    environment:
+      MYSQL_DATABASE: webapp
+      MYSQL_USER: webapp
+      MYSQL_PASSWORD: Passw0rd
+      MYSQL_ROOT_PASSWORD: Passw0rd
+    volumes:
+      - laravel-template-database-data:/var/lib/mysql:cached
+
+  php-fpm:
+    container_name: php-fpm
+    build:
+      context: ./docker/php-fpm
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/srv:cached
+    working_dir: /srv
+    depends_on:
+      - database
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    volumes:
+      - ./src/public:/srv/public:cached
+    depends_on:
+      - php-fpm
+
+volumes:
+  laravel-template-database-data:
+    external:
+      name: laravel-template-database-data
