@@ -16,6 +16,7 @@ class ChangeUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('password')->nullable()->change();
+            $table->dropColumn('name');
         });
 
         // down() で空文字に変換した password を NULL に戻している
@@ -36,6 +37,7 @@ class ChangeUsersTable extends Migration
 
         Schema::table('users', function (Blueprint $table) {
             $table->string('password')->nullable(false)->change();
+            $table->string('name');
         });
     }
 }

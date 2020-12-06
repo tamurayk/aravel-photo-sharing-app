@@ -10,7 +10,7 @@ services:
       MYSQL_PASSWORD: Passw0rd
       MYSQL_ROOT_PASSWORD: Passw0rd
     volumes:
-      - laravel-template-database-data:/var/lib/mysql:cached
+      - laravel-photo-sharing-app-database-data:/var/lib/mysql:cached
 
   php-fpm:
     container_name: php-fpm
@@ -36,6 +36,6 @@ services:
       - php-fpm
 
 volumes:
-  laravel-template-database-data:
+  laravel-photo-sharing-app-database-data:
     external:
-      name: laravel-template-database-data
+      name: laravel-photo-sharing-app-database-data
