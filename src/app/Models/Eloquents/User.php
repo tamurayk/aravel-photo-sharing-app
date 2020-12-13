@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Models\Eloquents;
 
 use App\Models\Interfaces\UserInterface;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable implements UserInterface
 {
@@ -14,7 +13,7 @@ class User extends Authenticatable implements UserInterface
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'email', 'password',
     ];
 
     /**
@@ -34,12 +33,4 @@ class User extends Authenticatable implements UserInterface
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function tasks(): HasMany
-    {
-        return $this->hasMany(Task::class);
-    }
 }

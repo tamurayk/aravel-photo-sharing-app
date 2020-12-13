@@ -50,8 +50,4 @@ Route::middleware('guest:user')->group(function () {
 Route::middleware('auth:user')->group(function () {
 
     Route::get('home', \App\Http\Controllers\User\Home\HomeIndexController::class)->name('home.index');
-
-    Route::get('tasks', \App\Http\Controllers\User\Task\TaskIndexController::class)->name('task.index');
-    Route::post('task', \App\Http\Controllers\User\Task\TaskStoreController::class)->name('task.store');
-    Route::delete('task/{task}', \App\Http\Controllers\User\Task\TaskDestroyController::class)->name('task.destroy');
 });

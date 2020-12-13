@@ -13,12 +13,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
                     You are logged in!
-                    <div>
-                      <a href="{{ route('task.index') }}">Your task list</a>
-                    </div>
-
                 </div>
             </div>
         </div>
