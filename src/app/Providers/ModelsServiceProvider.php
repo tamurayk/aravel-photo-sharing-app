@@ -18,6 +18,10 @@ final class ModelsServiceProvider extends ServiceProvider
             \App\Models\Interfaces\UserInterface::class,
             \App\Models\Eloquents\User::class
         );
+        $this->app->bind(
+            \App\Models\Interfaces\PostInterface::class,
+            \App\Models\Eloquents\Post::class
+        );
     }
 
     /**

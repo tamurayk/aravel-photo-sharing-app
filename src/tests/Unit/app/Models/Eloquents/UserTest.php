@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Test\Unit\app\Models\Eloquents;
 
 use App\Models\Eloquents\Authenticatable;
+use App\Models\Eloquents\Post;
 use App\Models\Eloquents\User;
 use App\Models\Interfaces\BaseInterface;
 use App\Models\Interfaces\UserInterface;
@@ -31,6 +32,32 @@ class UserTest extends AppTestCase
         $this->assertTrue(is_subclass_of($userEloquent, Authenticatable::class));
         $this->assertTrue(is_subclass_of($userEloquent, BaseInterface::class));
         $this->assertTrue(is_subclass_of($userEloquent, UserInterface::class));
+    }
+
+    public function testRelation()
+    {
+        factory(User::class)->create([
+            'id' => 1,
+        ]);
+
+        factory(Post::class)->create([
+            'id' => 1,
+            'user_id' => 1,
+        ]);
+        factory(Post::class)->create([
+            'id' => 2,
+            'user_id' => 1,
+        ]);
+        factory(Post::class)->create([
+            'id' => 3,
+            'user_id' => 2,
+        ]);
+
+        $userEloquent = new User();
+        /** @var User $user */
+        $user = $userEloquent->newQuery()->find(1);
+
+        $this->assertEquals(2, $user->posts()->count());
     }
 
     public function testHidden()
