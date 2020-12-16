@@ -46,6 +46,6 @@ class PostTest extends AppTestCase
         /** @var Post $post */
         $post = $postEloquent->newQuery()->find(1);
 
-        $this->assertEquals(1, $post->user()->id);
+        $this->assertEquals(1, $post->user->id);
     }
 }
