@@ -52,4 +52,38 @@ class HomeIndexControllerTest extends AppTestCase
             $baseUrl. '/home'
         );
     }
+
+    public function testCreate_未ログインの場合はログイン画面にリダイレクト()
+    {
+        // 認証されていない事を確認
+        $this->assertGuest(null);
+
+        $response = $this->get('/create');
+
+        // 未認証の場合は、login 画面にリダイレクトする事
+        $response->assertStatus(302);
+        $response->assertLocation('http://localhost/login');
+        $response->assertRedirect('http://localhost/login');
+    }
+
+    public function testCreate_ログイン中の場合は200が返る()
+    {
+        // 認証されていない事を確認
+        $this->assertGuest(null);
+
+        // 認証
+        $user = factory(\App\Models\Eloquents\User::class)->create();
+        $authUser = $this->actingAs($user, 'user');
+
+        // 認証済みである事を確認
+        $this->assertAuthenticated('user');
+
+        // HTTP リクエスト
+        $response = $authUser->get('/create');
+
+        // 認証済みユーザーからのリクエストの場合は 200 が返る事
+        $response->assertStatus(200);
+        // 正しい Blade ファイルを表示している事
+        $response->assertViewIs('user.post.create');
+    }
 }
