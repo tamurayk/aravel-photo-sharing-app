@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature\app\Http\Controllers\User\Home;
 
-use App\Http\Controllers\User\Home\HomeIndexController;
+use App\Http\Controllers\User\Post\PostStoreController;
 use Tests\AppTestCase;
 use Tests\Traits\RoutingTestTrait;
 
-class HomeIndexControllerTest extends AppTestCase
+class PostStoreControllerTest extends AppTestCase
 {
     use RoutingTestTrait;
 
@@ -28,11 +28,11 @@ class HomeIndexControllerTest extends AppTestCase
         $baseUrl = config('app.url');
         $this->assertDispatchedRoute(
             [
-                'actionName' => HomeIndexController::class,
-                'routeName' => 'home.index',
+                'actionName' => PostStoreController::class,
+                'routeName' => 'post.store',
             ],
-            'GET',
-            $baseUrl. '/home'
+            'POST',
+            $baseUrl. '/create'
         );
     }
 
@@ -48,8 +48,8 @@ class HomeIndexControllerTest extends AppTestCase
                     'auth:user',
                 ],
             ],
-            'GET',
-            $baseUrl. '/home'
+            'POST',
+            $baseUrl. '/create'
         );
     }
 }
