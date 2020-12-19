@@ -50,4 +50,7 @@ Route::middleware('guest:user')->group(function () {
 Route::middleware('auth:user')->group(function () {
 
     Route::get('home', \App\Http\Controllers\User\Home\HomeIndexController::class)->name('home.index');
+
+    Route::get('create', \App\Http\Controllers\User\Post\PostCreateController::class)->name('post.create');
+    Route::post('create', \App\Http\Controllers\User\Post\PostStoreController::class)->name('post.store');
 });

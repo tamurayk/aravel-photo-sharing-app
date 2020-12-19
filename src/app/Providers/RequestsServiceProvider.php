@@ -18,6 +18,10 @@ final class RequestsServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(
+            \App\Http\Requests\User\Post\Interfaces\PostStoreRequestInterface::class,
+            \App\Http\Requests\User\Post\PostStoreRequest::class
+        );
     }
 
     /**
