@@ -14,6 +14,13 @@ final class UseCasesServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        /**
+         * Post
+         */
+        $this->app->bind(
+            \App\Http\UseCases\User\Post\Interfaces\ImageStoreInterface::class,
+            \App\Http\UseCases\User\Post\ImageStore::class
+        );
     }
 
     /**
