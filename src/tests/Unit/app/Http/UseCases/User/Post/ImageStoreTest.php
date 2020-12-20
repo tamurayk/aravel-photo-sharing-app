@@ -28,17 +28,25 @@ class ImageStoreTest extends AppTestCase
         // See: src/config/filesystems.php disks.public
         Storage::fake('public');
 
+        //note: \Illuminate\Http\Testing\FileFactory::image の仕様で original.jpg を指定しても original.jpeg になる
         $uploadedImage = UploadedFile::fake()->image('original.jpg');
 
         $useCase = new ImageStore();
 
         $userId = 1;
-        $saveAs = sprintf('%s.%s', Str::uuid()->toString(), $uploadedImage->getExtension());
+        $saveAs = 'saved.jpg';
+
+        // saveAs を指定した場合
         $useCaseResult = $useCase($userId, $uploadedImage, $saveAs);
-
         $this->assertEquals($saveAs, $useCaseResult);
-
         Storage::disk('public')->assertExists(sprintf('%s/%s/%s', PostConstants::BASE_DIR, $userId, $saveAs));
+        Storage::disk('public')->assertMissing(sprintf('%s/%s/%s', PostConstants::BASE_DIR, $userId, 'original.jpg'));
+
+        // saveAs 未指定の場合
+        $useCaseResult = $useCase($userId, $uploadedImage);
+        $explodedFileName = explode('.', $useCaseResult);
+        $this->assertTrue(Str::isUuid($explodedFileName[0]));
+        $this->assertEquals('jpeg', $explodedFileName[1]);
         Storage::disk('public')->assertMissing(sprintf('%s/%s/%s', PostConstants::BASE_DIR, $userId, 'original.jpg'));
     }
 }

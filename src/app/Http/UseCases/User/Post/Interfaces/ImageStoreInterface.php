@@ -9,5 +9,5 @@ interface ImageStoreInterface
 {
     public function __construct();
 
-    public function __invoke(int $userId, UploadedFile $image, string $savePath): string;
+    public function __invoke(int $userId, UploadedFile $image, ?string $savePath = null): string;
 }
