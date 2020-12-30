@@ -31,8 +31,14 @@ class PostStoreController extends Controller
         $uploadedImage = $request->file('image');
 
         $savedFileName = $imageStoreUseCase($userId, $uploadedImage);
-        \Log::debug($savedFileName);
 
+        $data = array_merge($validated, [
+            'user_id' => $guard->id(),
+            'image' => $savedFileName,
+        ]);
+        \Log::debug(print_r($data, true));
+
+        //TODO: flash で success メッセージを出す
         return redirect()->route('post.create');
     }
 }
