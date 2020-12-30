@@ -41,7 +41,11 @@ class PostStore implements PostStoreInterface
         try {
             $this->userEloquent->newQuery()->findOrFail($userId);
             $post = $this->postEloquent->newInstance($fill);
-            return $post->save();
+            if (!$post->save())
+            {
+                throw new \Exception();
+            }
+            return true;
         } catch (\Exception $e) {
             throw new PostStoreException(
                 'Failed to store post.',

@@ -5,7 +5,9 @@ namespace Tests\Feature\app\Http\Controllers\User\Home;
 
 use App\Http\Controllers\User\Post\PostStoreController;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Tests\AppTestCase;
 use Tests\Traits\RoutingTestTrait;
 
@@ -80,6 +82,8 @@ class PostStoreControllerTest extends AppTestCase
         // 認証済みである事を確認
         $this->assertAuthenticated('user');
 
+        $this->assertEquals(0, DB::table('posts')->count(), '事前確認');
+
         // HTTP リクエスト
         $data = [
             'caption' => str_repeat('a', 255),
@@ -90,8 +94,9 @@ class PostStoreControllerTest extends AppTestCase
         $response->assertLocation('http://localhost/create');
         $response->assertRedirect('http://localhost/create');
 
-        $this->markTestIncomplete();
-        //TODO: posts にレコードが追加されている事
-        //TODO: app/public/posts/1 に画像が uuid.jpeg で保存されている事
+        $this->assertEquals(1, DB::table('posts')->count(), 'postsにレコードが1件追加されている事');
+        $post = DB::table('posts')->find(1);
+        $this->assertTrue(Str::isUuid((explode('.', $post->image))[0]), '追加されたレコードの値が期待値通りである事');
+        $this->assertEquals(str_repeat('a', 255), $post->caption, '追加されたレコードの値が期待値通りである事');
     }
 }
