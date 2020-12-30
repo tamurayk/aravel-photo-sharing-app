@@ -74,7 +74,7 @@ class PostStoreTest extends AppTestCase
             'caption' => 'a',
             'image' => 'b',
         ];
-        $useCase = new PostStore(new Post());
+        $useCase = new PostStore(new Post(), new User());
         $result = $useCase(1, $data);
     }
 }
