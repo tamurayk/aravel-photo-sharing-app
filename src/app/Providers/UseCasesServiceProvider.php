@@ -21,6 +21,10 @@ final class UseCasesServiceProvider extends ServiceProvider
             \App\Http\UseCases\User\Post\Interfaces\ImageStoreInterface::class,
             \App\Http\UseCases\User\Post\ImageStore::class
         );
+        $this->app->bind(
+            \App\Http\UseCases\User\Post\Interfaces\PostStoreInterface::class,
+            \App\Http\UseCases\User\Post\PostStore::class
+        );
     }
 
     /**
