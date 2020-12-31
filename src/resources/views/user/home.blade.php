@@ -14,6 +14,9 @@
                         </div>
                     @endif
                     You are logged in!
+                    <div>
+                        <a href="{{ route('post.create') }}">add new post</a>
+                    </div>
                 </div>
             </div>
         </div>
