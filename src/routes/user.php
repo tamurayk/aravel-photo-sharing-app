@@ -54,3 +54,8 @@ Route::middleware('auth:user')->group(function () {
     Route::get('create', \App\Http\Controllers\User\Post\PostCreateController::class)->name('post.create');
     Route::post('create', \App\Http\Controllers\User\Post\PostStoreController::class)->name('post.store');
 });
+
+/**
+ * Not Require user auth
+ */
+Route::get('{userName}', \App\Http\Controllers\User\Post\PostIndexController::class)->name('post.index');
