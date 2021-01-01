@@ -5,6 +5,7 @@ namespace App\Models\Eloquents;
 
 use App\Models\Interfaces\UserInterface;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable implements UserInterface
 {
@@ -34,6 +35,11 @@ class User extends Authenticatable implements UserInterface
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function user_profile(): HasOne
+    {
+        return $this->hasOne(UserProfile::class);
+    }
 
     /**
      * @return HasMany

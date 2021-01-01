@@ -19,6 +19,10 @@ final class ModelsServiceProvider extends ServiceProvider
             \App\Models\Eloquents\User::class
         );
         $this->app->bind(
+            \App\Models\Interfaces\UserProfileInterface::class,
+            \App\Models\Eloquents\UserProfile::class
+        );
+        $this->app->bind(
             \App\Models\Interfaces\PostInterface::class,
             \App\Models\Eloquents\Post::class
         );

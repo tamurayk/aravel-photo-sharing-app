@@ -6,6 +6,7 @@ namespace Test\Unit\app\Models\Eloquents;
 use App\Models\Eloquents\Authenticatable;
 use App\Models\Eloquents\Post;
 use App\Models\Eloquents\User;
+use App\Models\Eloquents\UserProfile;
 use App\Models\Interfaces\BaseInterface;
 use App\Models\Interfaces\UserInterface;
 use Carbon\Carbon;
@@ -40,6 +41,11 @@ class UserTest extends AppTestCase
             'id' => 1,
         ]);
 
+        factory(UserProfile::class)->create([
+            'id' => 1,
+            'user_id' => 1,
+        ]);
+
         factory(Post::class)->create([
             'id' => 1,
             'user_id' => 1,
@@ -57,6 +63,8 @@ class UserTest extends AppTestCase
         /** @var User $user */
         $user = $userEloquent->newQuery()->find(1);
 
+
+        $this->assertEquals(1, $user->user_profile->id);
         $this->assertEquals(2, $user->posts()->count());
     }
 
