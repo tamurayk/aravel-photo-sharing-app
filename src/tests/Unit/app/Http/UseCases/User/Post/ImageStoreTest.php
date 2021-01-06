@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Unit\app\Http\UseCase\User\Task;
+namespace Test\Unit\app\Http\UseCase\User\Post;
 
 use App\Http\UseCases\User\Post\ImageStore;
 use App\Models\Constants\PostConstants;

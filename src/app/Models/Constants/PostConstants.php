@@ -6,4 +6,5 @@ namespace App\Models\Constants;
 final class PostConstants
 {
     const BASE_DIR = 'posts';
+    const PER_PAGE = 10;
 }
