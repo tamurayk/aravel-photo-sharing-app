@@ -32,6 +32,7 @@ services:
       - "8000:80"
     volumes:
       - ./src/public:/srv/public:cached
+      - ./src/storage/app/public:/srv/public/storage:cached
     depends_on:
       - php-fpm
 
