@@ -32,6 +32,11 @@ services:
       - "8000:80"
     volumes:
       - ./src/public:/srv/public:cached
+      # 画像表示には下記のマウントが必要
+      #  - 画像URL
+      #    - http://localhost:8000/storage/xxx/xxx/hoge.jpeg
+      #  - 上記の画像URLを表示する為には、Nginx コンテナに /storage/xxx/xxx/hoge.jpeg が必要
+      #  - `php artisan storage:link` で php-fpm コンテナ内に symbolic link (public/storage -> /srv/storage/app/public) を貼るだけでは 404 になる
       - ./src/storage/app/public:/srv/public/storage:cached
     depends_on:
       - php-fpm
