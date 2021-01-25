@@ -10,6 +10,7 @@ use App\Http\UseCases\User\Post\Interfaces\ImageStoreInterface;
 use App\Http\UseCases\User\Post\Interfaces\PostStoreInterface;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 
 class PostStoreController extends Controller
 {
@@ -42,6 +43,11 @@ class PostStoreController extends Controller
         $postStoreUseCase($userId, $data);
 
         //TODO: flash で success メッセージを出す
-        return redirect()->route('post.create');
+        $userName = Arr::get($guard->user()->user_profile, 'name');
+        if ($userName) {
+            return redirect()->route('post.index', ['userName' => $userName]);
+        } else {
+            return redirect()->route('home.index');
+        }
     }
 }

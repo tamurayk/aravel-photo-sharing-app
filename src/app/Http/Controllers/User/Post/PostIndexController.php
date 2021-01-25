@@ -6,6 +6,7 @@ namespace App\Http\Controllers\User\Post;
 use App\Http\Controllers\Controller;
 use App\Http\UseCases\User\Post\Exceptions\PostIndexException;
 use App\Http\UseCases\User\Post\Interfaces\PostIndexInterface;
+use App\Models\Eloquents\User;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -22,6 +23,9 @@ class PostIndexController extends Controller
         Request $request,
         PostIndexInterface $useCase
     ): View {
+        /** @var User $user */
+        $user = $guard->user();
+
         $paginatorParams = [
             'perPage' => $request->query('perPage'),
             'column' => $request->query('column'),
@@ -41,6 +45,7 @@ class PostIndexController extends Controller
         // TODO: 自分の投稿一覧かどうかでbladeを分ける?
         return view('user.post.index', [
             'paginator' => $paginator->appends($request->query()),
+            'isMine' => $user && $user->isMine($userName),
         ]);
     }
 }

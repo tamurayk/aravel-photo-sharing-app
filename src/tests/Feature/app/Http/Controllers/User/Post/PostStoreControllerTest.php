@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Tests\Feature\app\Http\Controllers\User\Home;
 
 use App\Http\Controllers\User\Post\PostStoreController;
+use App\Models\Eloquents\User;
+use App\Models\Eloquents\UserProfile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -76,8 +78,15 @@ class PostStoreControllerTest extends AppTestCase
         $image = UploadedFile::fake()->image('original.jpeg');
 
         // 認証
-        $user = factory(\App\Models\Eloquents\User::class)->create();
-        $authUser = $this->actingAs($user, 'user');
+        $user_1 = factory(User::class)->create([
+            'id' => 1,
+        ]);
+        factory(UserProfile::class)->create([
+            'id' => 1,
+            'user_id' => 1,
+            'name' => 'user1',
+        ]);
+        $authUser = $this->actingAs($user_1, 'user');
 
         // 認証済みである事を確認
         $this->assertAuthenticated('user');
@@ -91,8 +100,8 @@ class PostStoreControllerTest extends AppTestCase
         ];
         $response = $authUser->post('/create', $data);
         $response->assertStatus(302);
-        $response->assertLocation('http://localhost/create');
-        $response->assertRedirect('http://localhost/create');
+        $response->assertLocation('http://localhost/user1');
+        $response->assertRedirect('http://localhost/user1', '投稿一覧にリダイレクトする事');
 
         $this->assertEquals(1, DB::table('posts')->count(), 'postsにレコードが1件追加されている事');
         $post = DB::table('posts')->find(1);

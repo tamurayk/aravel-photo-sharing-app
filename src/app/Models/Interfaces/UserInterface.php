@@ -24,6 +24,8 @@ use Illuminate\Support\Collection;
  */
 interface UserInterface extends BaseInterface
 {
+    public function isMine(string $userName): bool;
+
     public function user_profile(): HasOne;
 
     public function posts(): HasMany;
