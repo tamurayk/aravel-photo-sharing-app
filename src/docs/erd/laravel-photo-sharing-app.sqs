@@ -515,7 +515,7 @@ password: SNSログインに対応する為にnullを許可
             <y>390.00</y>
         </location>
         <size>
-            <width>201.00</width>
+            <width>214.00</width>
             <height>160.00</height>
         </size>
         <zorder>1</zorder>
@@ -549,8 +549,10 @@ password: SNSログインに対応する為にnullを許可
             <name><![CDATA[name]]></name>
             <type><![CDATA[VARCHAR(255)]]></type>
             <autoIncrement><![CDATA[0]]></autoIncrement>
-            <notNull><![CDATA[0]]></notNull>
+            <indexed><![CDATA[1]]></indexed>
+            <notNull><![CDATA[1]]></notNull>
             <uid><![CDATA[A8F3959A-170E-447F-8EE9-B03D46D1DB89]]></uid>
+            <unique><![CDATA[1]]></unique>
         </SQLField>
         <SQLField>
             <name><![CDATA[description]]></name>
@@ -645,17 +647,17 @@ follower_id
         <overviewPanelHidden><![CDATA[0]]></overviewPanelHidden>
         <pageBoundariesVisible><![CDATA[0]]></pageBoundariesVisible>
         <PageGridVisible><![CDATA[0]]></PageGridVisible>
-        <RightSidebarWidth><![CDATA[892.000000]]></RightSidebarWidth>
+        <RightSidebarWidth><![CDATA[968.000000]]></RightSidebarWidth>
         <sidebarIndex><![CDATA[0]]></sidebarIndex>
         <snapToGrid><![CDATA[0]]></snapToGrid>
         <SourceSidebarWidth><![CDATA[0.000000]]></SourceSidebarWidth>
         <SQLEditorFileFormatVersion><![CDATA[4]]></SQLEditorFileFormatVersion>
         <uid><![CDATA[7DB93304-7B76-4AF8-BE0A-6D56AF78EA69]]></uid>
-        <windowHeight><![CDATA[1113.000000]]></windowHeight>
-        <windowLocationX><![CDATA[-902.000000]]></windowLocationX>
-        <windowLocationY><![CDATA[616.000000]]></windowLocationY>
+        <windowHeight><![CDATA[1247.000000]]></windowHeight>
+        <windowLocationX><![CDATA[562.000000]]></windowLocationX>
+        <windowLocationY><![CDATA[117.000000]]></windowLocationY>
         <windowScrollOrigin><![CDATA[{0, 0}]]></windowScrollOrigin>
-        <windowWidth><![CDATA[893.000000]]></windowWidth>
+        <windowWidth><![CDATA[1245.000000]]></windowWidth>
     </SQLDocumentInfo>
     <AllowsIndexRenamingOnInsert><![CDATA[1]]></AllowsIndexRenamingOnInsert>
     <defaultLabelExpanded><![CDATA[1]]></defaultLabelExpanded>

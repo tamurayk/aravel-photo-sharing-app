@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Unit\app\Http\UseCase\User\Task;
+namespace Test\Unit\app\Http\UseCase\User\Post;
 
 use App\Http\UseCases\User\Post\Exceptions\PostStoreException;
 use App\Http\UseCases\User\Post\PostStore;

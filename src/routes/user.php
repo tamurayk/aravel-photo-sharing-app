@@ -51,6 +51,13 @@ Route::middleware('auth:user')->group(function () {
 
     Route::get('home', \App\Http\Controllers\User\Home\HomeIndexController::class)->name('home.index');
 
+    // 新規投稿
     Route::get('create', \App\Http\Controllers\User\Post\PostCreateController::class)->name('post.create');
     Route::post('create', \App\Http\Controllers\User\Post\PostStoreController::class)->name('post.store');
 });
+
+/**
+ * Not Require user auth
+ */
+// 投稿一覧
+Route::get('{userName}', \App\Http\Controllers\User\Post\PostIndexController::class)->name('post.index');
