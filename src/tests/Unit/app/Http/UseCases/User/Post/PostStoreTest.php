@@ -4,10 +4,13 @@ declare(strict_types=1);
 namespace Test\Unit\app\Http\UseCase\User\Post;
 
 use App\Http\UseCases\User\Post\Exceptions\PostStoreException;
+use App\Http\UseCases\User\Post\ImageStore;
 use App\Http\UseCases\User\Post\PostStore;
 use App\Models\Eloquents\Post;
 use App\Models\Eloquents\User;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Tests\AppTestCase;
 
 class PostStoreTest extends AppTestCase
@@ -34,17 +37,20 @@ class PostStoreTest extends AppTestCase
 
         $this->assertEquals(0, DB::table('posts')->count(), '事前確認');
 
-        $useCase = new PostStore(new Post(), new User());
+        $useCase = new PostStore(new Post(), new User(), new ImageStore());
         $data = [
             'caption' => 'a',
             'image' => 'b',
         ];
-        $result = $useCase(1, $data);
+        $uploadedImage = UploadedFile::fake()->image('image.jpeg');
+        $result = $useCase(1, $data, $uploadedImage);
         $this->assertTrue($result);
         $this->assertEquals(1, DB::table('posts')->count());
         $post = DB::table('posts')->where('user_id', 1)->first();
         $this->assertEquals('a', $post->caption);
-        $this->assertEquals('b', $post->image);
+        $explodedFileName = explode('.', $post->image);
+        $this->assertTrue(Str::isUuid($explodedFileName[0]));
+        $this->assertEquals('jpeg', $explodedFileName[1]);
     }
 
     /**
@@ -59,8 +65,9 @@ class PostStoreTest extends AppTestCase
         $this->expectException(PostStoreException::class);
 
         $data = [];
-        $useCase = new PostStore(new Post(), new User());
-        $result = $useCase(1, $data);
+        $uploadedImage = UploadedFile::fake()->image('image.jpeg');
+        $useCase = new PostStore(new Post(), new User(), new ImageStore());
+        $result = $useCase(1, $data, $uploadedImage);
     }
 
     /**
@@ -74,7 +81,8 @@ class PostStoreTest extends AppTestCase
             'caption' => 'a',
             'image' => 'b',
         ];
-        $useCase = new PostStore(new Post(), new User());
-        $result = $useCase(1, $data);
+        $uploadedImage = UploadedFile::fake()->image('image.jpeg');
+        $useCase = new PostStore(new Post(), new User(), new ImageStore());
+        $result = $useCase(1, $data, $uploadedImage);
     }
 }

@@ -6,7 +6,6 @@ namespace App\Http\Controllers\User\Post;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\Post\Interfaces\PostStoreRequestInterface;
 use App\Http\Requests\User\Post\PostStoreRequest;
-use App\Http\UseCases\User\Post\Interfaces\ImageStoreInterface;
 use App\Http\UseCases\User\Post\Interfaces\PostStoreInterface;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
@@ -17,36 +16,31 @@ class PostStoreController extends Controller
     /**
      * @param Guard $guard
      * @param PostStoreRequestInterface $request
-     * @param ImageStoreInterface $imageStoreUseCase
-     * @param PostStoreInterface $postStoreUseCase
+     * @param PostStoreInterface $useCase
      * @return RedirectResponse
      */
     public function __invoke(
         Guard $guard,
         PostStoreRequestInterface $request,
-        ImageStoreInterface $imageStoreUseCase,
-        PostStoreInterface $postStoreUseCase
+        PostStoreInterface $useCase
     ): RedirectResponse {
         $userId = $guard->user()->id;
 
         /** @var PostStoreRequest $request */
         $validated = $request->validated();
-
-        // 画像を保存
         $uploadedImage = $request->file('image');
-        $savedFileName = $imageStoreUseCase($userId, $uploadedImage);
 
-        // postsにレコード追加
-        $data = array_merge($validated, [
-            'image' => $savedFileName,
-        ]);
-        $postStoreUseCase($userId, $data);
+        // note:
+        //  Controllerで複数のuseCaseの実行順序ハンドリングをするべきでないので、
+        //  Controllerから呼び出すuseCaseを1つにまとめ、useCase内でサブuseCaseを呼ぶようにした
+        $useCase($userId, $validated, $uploadedImage);
 
-        //TODO: flash で success メッセージを出す
         $userName = Arr::get($guard->user()->user_profile, 'name');
         if ($userName) {
+            //TODO: flash で success メッセージを出す
             return redirect()->route('post.index', ['userName' => $userName]);
         } else {
+            //FIXME: ユーザー登録時にユーザー名を必須項目にするまでの暫定処理
             return redirect()->route('home.index');
         }
     }
