@@ -101,7 +101,7 @@ class PostStoreControllerTest extends AppTestCase
         $response = $authUser->post('/create', $data);
         $response->assertStatus(302);
         $response->assertLocation('http://localhost/user1');
-        $response->assertRedirect('http://localhost/user1', '投稿一覧にリダイレクトする事');
+        $response->assertRedirect('http://localhost/user1');
 
         $this->assertEquals(1, DB::table('posts')->count(), 'postsにレコードが1件追加されている事');
         $post = DB::table('posts')->find(1);

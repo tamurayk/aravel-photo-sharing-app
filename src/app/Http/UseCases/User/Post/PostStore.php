@@ -4,11 +4,13 @@ declare(strict_types=1);
 namespace App\Http\UseCases\User\Post;
 
 use App\Http\UseCases\User\Post\Exceptions\PostStoreException;
+use App\Http\UseCases\User\Post\Interfaces\ImageStoreInterface;
 use App\Http\UseCases\User\Post\Interfaces\PostStoreInterface;
 use App\Models\Eloquents\Post;
 use App\Models\Eloquents\User;
 use App\Models\Interfaces\PostInterface;
 use App\Models\Interfaces\UserInterface;
+use Illuminate\Http\UploadedFile;
 
 class PostStore implements PostStoreInterface
 {
@@ -18,27 +20,40 @@ class PostStore implements PostStoreInterface
     /** @var User */
     private $userEloquent;
 
-    public function __construct(PostInterface $post, UserInterface $user)
-    {
+    /** @var ImageStore */
+    private $imageStoreUseCase;
+
+    public function __construct(
+        PostInterface $post,
+        UserInterface $user,
+        ImageStoreInterface $imageStoreUseCase
+    ) {
         $this->postEloquent = $post;
         $this->userEloquent = $user;
+        $this->imageStoreUseCase = $imageStoreUseCase;
     }
 
     /**
      * @param int $userId
      * @param array $data
+     * @param UploadedFile $uploadedFile
      * @return bool
      * @throws PostStoreException
      */
     public function __invoke(
         int $userId,
-        array $data
+        array $data,
+        UploadedFile $uploadedFile
     ): bool {
-        $fill = array_merge($data, [
-            'user_id' => $userId,
-        ]);
-
         try {
+            // 画像を保存
+            $savedFileName = $this->imageStoreUseCase->__invoke($userId, $uploadedFile);
+
+            $fill = array_merge($data, [
+                'user_id' => $userId,
+                'image' => $savedFileName,
+            ]);
+
             $this->userEloquent->newQuery()->findOrFail($userId);
             $post = $this->postEloquent->newInstance($fill);
             if (!$post->save())
