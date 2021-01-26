@@ -6,8 +6,8 @@ COPY config/php.ini-development /usr/local/etc/php/php.ini
 # UploadedFile::fake()->image() を使用するには gd が必要
 # gd のインストール方法は https://hub.docker.com/_/php の example を参照
 RUN set -eux \
-    && apt-get update \
-    && apt-get install -y \
+    && apt update \
+    && apt install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
