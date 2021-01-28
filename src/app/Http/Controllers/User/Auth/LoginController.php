@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\User\Auth;
 
+use App\Http\UseCases\User\Auth\Interfaces\RegisterInterface;
+use App\Http\UseCases\User\Auth\Register;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Eloquents\User;
@@ -32,14 +34,19 @@ class LoginController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+    /** @var Register */
+    private $registerUseCase;
+
     /**
      * Create a new controller instance.
      *
+     * @param RegisterInterface $useCase
      * @return void
      */
-    public function __construct()
+    public function __construct(RegisterInterface $useCase)
     {
         $this->middleware('guest')->except('logout');
+        $this->registerUseCase = $useCase;
     }
 
     /**
@@ -107,6 +114,7 @@ class LoginController extends Controller
     /**
      * @param string $provider
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \App\Http\UseCases\User\Auth\Exceptions\RegisterException
      */
     public function handleProviderCallback(string $provider)
     {
@@ -133,14 +141,17 @@ class LoginController extends Controller
             return redirect()->route('home')->with('oauth_error', '名前が取得できませんでした');
         }
 
-        Auth::login(User::firstOrCreate(
-            [
+        // すでに登録済みのユーザーだったらそのままログイン、未登録だったら登録してログイン
+        $user = User::query()->where('email', $email)->first(); //note: DB::table('users')->where('email', $email)->first(); では UserEloquent が取得できない
+        if (!$user) {
+            $data = [
                 'email' => $email,
-            ],
-            [
-                'name' => $name,
-            ]
-        ));
+                'name' => $name, //FIXME すでに存在する user_profiles.name の場合はエラーになる
+                'password' => null,
+            ];
+            $user = $this->registerUseCase->__invoke($data);
+        }
+        Auth::login($user);
 
         return redirect($this->redirectTo);
     }

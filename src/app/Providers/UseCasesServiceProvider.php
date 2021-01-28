@@ -14,6 +14,11 @@ final class UseCasesServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(
+            \App\Http\UseCases\User\Auth\Interfaces\RegisterInterface::class,
+            \App\Http\UseCases\User\Auth\Register::class
+        );
+
         /**
          * Post
          */
