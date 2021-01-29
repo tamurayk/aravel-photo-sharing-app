@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\User\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\UseCases\User\Auth\Interfaces\RegisterInterface;
+use App\Http\UseCases\User\Auth\SignUp;
 use App\Models\Eloquents\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,14 +33,19 @@ class RegisterController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+    /** @var SignUp */
+    private $signUpUseCase;
+
     /**
      * Create a new controller instance.
      *
+     * @param RegisterInterface $useCase
      * @return void
      */
-    public function __construct()
+    public function __construct(RegisterInterface $useCase)
     {
         $this->middleware('guest');
+        $this->signUpUseCase = $useCase;
     }
 
     /**
@@ -84,15 +90,13 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param array $data
      * @return User
+     * @throws \App\Http\UseCases\User\Auth\Exceptions\RegisterException
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $user = $this->signUpUseCase->__invoke($data);
+        return $user;
     }
 }
