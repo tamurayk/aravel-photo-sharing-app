@@ -4,12 +4,19 @@
 
     /* Basic Options */
     // "incremental": true,                   /* Enable incremental compilation */
-    "target": "es5",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */
+    // note: target
+    //   - どの動作環境に向けてトランスパイルするかを指定
+    //   - esnext
+    //     - Babelなどの専用のコンパイラやモジュールバンドラに処理を任せる
+    "target": "esnext",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */
+    // note: module
+    //   - JavaScriptにはいくつかのモジュールパターン(CommonJSやAMD、ECMAScriptなど)がある
+    //   - commonjs は Node.js で使われるモジュールパターン
     "module": "commonjs",                     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
     // "lib": [],                             /* Specify library files to be included in the compilation. */
-    // "allowJs": true,                       /* Allow javascript files to be compiled. */
+    "allowJs": true,                       /* Allow javascript files to be compiled. */
     // "checkJs": true,                       /* Report errors in .js files. */
-    // "jsx": "preserve",                     /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
+     "jsx": "react",                     /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
     // "declaration": true,                   /* Generates corresponding '.d.ts' file. */
     // "declarationMap": true,                /* Generates a sourcemap for each corresponding '.d.ts' file. */
     // "sourceMap": true,                     /* Generates corresponding '.map' file. */
@@ -66,5 +73,22 @@
     /* Advanced Options */
     "skipLibCheck": true,                     /* Skip type checking of declaration files. */
     "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
-  }
+  },
+  // note: include
+  //   "files" と "include" のどちらも明示的に指定されていない場合、
+  //    デフォルトでコンパイラは "exclude" プロパティで指定されたものを除くディレクトリとサブディレクトリ内の、
+  //    全てのTypeScriptファイル(.ts、.d.ts、.tsx)を含めます。
+  "include": [
+    // note: サポートされるワイルドカード
+    //   * : 0文字以上の文字にマッチ(ディレクトリ区切りを除く)
+    //   ? : 1文字以上の文字にマッチ(ディレクトリ区切りを除く)
+    //   **/ : サブディレクトリに再帰的にマッチ
+    "resources/ts/**/*.ts",
+    "resources/ts/**/*.tsx"
+  ],
+  // note: デフォルトでnode_modules、bower_components、jspm_packages、<outDir>が除外
+  "exclude": [
+    "node_modules",
+    "vendor"
+  ]
 }

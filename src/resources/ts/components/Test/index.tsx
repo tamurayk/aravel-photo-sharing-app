@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 
 export default class Test extends Component {
   render() {
@@ -8,5 +7,3 @@ export default class Test extends Component {
     );
   }
 }
-
-ReactDOM.render(<Test />, document.getElementById('test'));
