@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+  {{-- React Component: src/resources/js/components/Test --}}
+  <div id="test"></div>
+
   <form {{ route('post.store') }} method="post" enctype='multipart/form-data'>
     {{ csrf_field() }}
     <p>
